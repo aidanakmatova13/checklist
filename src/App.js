@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import {useEffect, useState} from "react";
+import Employee from "./Components/Employee";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [employees, setEmployees] = useState([])
+    const [isCheckedAll, setIsCheckedAll] = useState(false)
+
+    useEffect(() => {
+        axios('https://613d36a694dbd600172ab88f.mockapi.io/api/employees')
+            .then(({data}) => setEmployees(data))
+    }, [])
+
+    return (
+        <div className='container'>
+            <table className='table table-primary'>
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox"
+                               onChange={(e) => setIsCheckedAll(e.target.checked)}
+                        />
+                    </th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Возраст</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    employees.map(el =>
+                        <Employee el={el} key={el.id} isCheckedAll={isCheckedAll}/>
+                    )
+                }
+                </tbody>
+            </table>
+        </div>
+    );
 }
 
 export default App;
