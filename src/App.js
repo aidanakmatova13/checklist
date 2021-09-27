@@ -13,12 +13,12 @@ function App() {
     }, [])
 
     const handleCheck = (id, status) => {
-        if (status){
-            setSelected([...selected, employees.find(item => item.id === id)])
-        }
-        // (setSelected(status && selected.filter((item) => item.id !== id)? [...selected, employees.find((item) => item.id === id)]
-        //     : selected.filter((item) => item.id !== id && [...selected])))
-        // setIsCheckedAll( false)
+        // if (status){
+        //     setSelected([...selected, employees.find(item => item.id === id)])
+        // }
+        (setSelected(status && selected.filter((item) => item.id !== id)? [...selected, employees.find((item) => item.id === id)]
+            : selected.filter((item) => item.id !== id && [...selected])))
+        setIsCheckedAll( false)
     }
     return (
         <div className='container'>
@@ -30,9 +30,9 @@ function App() {
                                onChange={(e) => setIsCheckedAll(e.target.checked)}
                         />
                     </th>
-                    <th>Имя</th>
-                    <th>Фамилия</th>
-                    <th>Возраст</th>
+                    <th>Имя пользователя</th>
+                    <th>Фамилия пользователя</th>
+                    <th>Возраст пользователя</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,5 +52,7 @@ function App() {
         </div>
     );
 }
+
+
 
 export default App;
