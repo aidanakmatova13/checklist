@@ -16,12 +16,10 @@ function App() {
         if (status){
             setSelected([...selected, employees.find(item => item.id === id)])
         }
-
         // (setSelected(status && selected.filter((item) => item.id !== id)? [...selected, employees.find((item) => item.id === id)]
         //     : selected.filter((item) => item.id !== id && [...selected])))
         // setIsCheckedAll( false)
     }
-
     return (
         <div className='container'>
             <table className='table table-primary mt-4'>
