@@ -1,24 +1,35 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import Employee from "./Components/Employee";
+import PeopleItem from "./Components/PeopleItem";
 
 function App() {
-    const [employees, setEmployees] = useState([])
-    const [isCheckedAll, setIsCheckedAll] = useState(false)
-    const [selected, setSelected] = useState([])
+    const [people, setPeople] = useState([])
+    const [selectAll, setSelectAll] = useState(false)
+    const [selectedPerson, setSelectedPerson] = useState([])
+    const [type, setType] = useState('')
 
     useEffect(() => {
         axios('https://613d36a694dbd600172ab88f.mockapi.io/api/employees')
-            .then(({data}) => setEmployees(data))
+            .then(({data}) => setPeople(data))
     }, [])
 
-    const handleCheck = (id, status) => {
+    const handleInputAll = (e) => {
+        setSelectAll(e.target.checked)
+        setType("all")
+        if(e.target.checked){
+            setSelectedPerson(people)
+        } else
+        {setSelectedPerson([])}
+    }
+
+    const handleCheck = (id, type) => {
         // if (status){
         //     setSelected([...selected, employees.find(item => item.id === id)])
         // }
-        (setSelected(status && selected.filter((item) => item.id !== id)? [...selected, employees.find((item) => item.id === id)]
-            : selected.filter((item) => item.id !== id && [...selected])))
-        setIsCheckedAll( false)
+        (setSelectedPerson(type && selectedPerson.filter((item) => item.id !== id)? [...selectedPerson, people.find((item) => item.id === id)]
+            : selectedPerson.filter((item) => item.id !== id && [...selectedPerson])))
+        setSelectAll( false)
     }
     return (
         <div className='container'>
@@ -27,9 +38,10 @@ function App() {
                 <tr>
                     <th>
                         <input type="checkbox"
-                               onChange={(e) => setIsCheckedAll(e.target.checked)}
+                               onChange={handleInputAll}
                         />
                     </th>
+                    <th>ID</th>
                     <th>Имя пользователя</th>
                     <th>Фамилия пользователя</th>
                     <th>Возраст пользователя</th>
@@ -37,15 +49,28 @@ function App() {
                 </thead>
                 <tbody>
                 {
-                    employees.map(el =>
-                        <Employee el={el} key={el.id} isCheckedAll={isCheckedAll} handleCheck={handleCheck}/>
+                    people.map((person, idx) =>
+                        // <Employee el={el} key={el.id} isCheckedAll={isCheckedAll} handleCheck={handleCheck}/>
+                        <PeopleItem
+                            key={person.id}
+                            person={person}
+                            idx={idx}
+                            selectedPerson={selectedPerson}
+                            setSelectedPerson={setSelectedPerson}
+                            selectAll={selectAll}
+                            setSelectAll={setSelectAll}
+                            people={people}
+                            setType={setType}
+                            type={type}
+                            handleCheck={handleCheck}
+                        />
                     )
                 }
                 </tbody>
             </table>
             <h4>Пользователи:</h4>
             {
-                selected.map(el =>
+                selectedPerson.map(el =>
                     <div>{el.name}</div>
                 )
             }
